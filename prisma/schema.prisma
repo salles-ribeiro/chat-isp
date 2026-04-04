@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id           String   @id
+  nomeCompleto String
+  email        String   @unique
+  nomeExibicao String   @unique
+  equipe       String?  @default("")
+  senhaHash    String
+  avatar       String?
+  admin        Boolean  @default(false)
+  gestor       Boolean  @default(false)
+  criadoEm     DateTime @default(now())
+  membros      MembroCanal[]
+  @@map("usuarios")
+}
+
+model Canal {
+  id        Int        @id @default(autoincrement())
+  slug      String     @unique
+  nome      String
+  titulo    String     @default("")   // título exibido (pode ter maiúsculas)
+  descricao String     @default("")
+  aberto    Boolean    @default(false) // false = somente membros
+  criadoEm  DateTime   @default(now())
+  mensagens Mensagem[]
+  membros   MembroCanal[]
+  @@map("canais")
+}
+
+model MembroCanal {
+  cpf       String
+  canalSlug String
+  criadoEm  DateTime @default(now())
+  usuario   Usuario  @relation(fields: [cpf], references: [id])
+  canal     Canal    @relation(fields: [canalSlug], references: [slug])
+  @@id([cpf, canalSlug])
+  @@map("membros_canal")
+}
+
+model Mensagem {
+  id          Int      @id @default(autoincrement())
+  tipo        String   @default("usuario")
+  autorCpf    String?
+  autor       String?
+  texto       String   @default("")
+  urlArquivo  String?
+  tipoArquivo String?
+  nomeArquivo String?
+  criadaEm    DateTime @default(now())
+  canal       Canal    @relation(fields: [canalId], references: [id])
+  canalId     Int
+  @@index([canalId, criadaEm])
+  @@map("mensagens")
+}
+
+model ConversaPrivada {
+  id           String            @id
+  participante1 String
+  participante2 String
+  criadaEm     DateTime          @default(now())
+  mensagens    MensagemPrivada[]
+  @@map("conversas_privadas")
+}
+
+model MensagemPrivada {
+  id          Int             @id @default(autoincrement())
+  autorCpf    String
+  autorNome   String
+  texto       String          @default("")
+  urlArquivo  String?
+  tipoArquivo String?
+  nomeArquivo String?
+  lida        Boolean         @default(false)
+  criadaEm    DateTime        @default(now())
+  conversa    ConversaPrivada @relation(fields: [conversaId], references: [id])
+  conversaId  String
+  @@index([conversaId, criadaEm])
+  @@map("mensagens_privadas")
+}
+
+model UltimaVisita {
+  cpf        String
+  canalSlug  String
+  visitadoEm DateTime @default(now())
+  @@id([cpf, canalSlug])
+  @@map("ultima_visita")
+}
