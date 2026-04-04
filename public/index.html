@@ -2979,8 +2979,7 @@
             localStorage.setItem("isp_token", r.token);
             localStorage.setItem("isp_nome", r.nome);
             if (r.cpf) localStorage.setItem("isp_cpf", r.cpf);
-            if (r.admin) mostrarAdmin();
-            else iniciarChat(r.token, r.nome, false, r.gestor || false);
+            iniciarChat(r.token, r.nome, !!r.admin, !!r.gestor);
           }
         } catch {
           document.getElementById("l-erro").textContent = "Erro de conexão.";
