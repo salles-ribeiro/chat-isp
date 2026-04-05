@@ -2779,7 +2779,9 @@
         document.getElementById("pp-equipe").textContent = u.equipe || "—";
         document.getElementById("pp-desde").textContent = new Date(
           u.criadoEm,
-        ).toLocaleDateString("pt-BR");
+        ).toLocaleDateString("pt-BR", {
+          timeZone: "America/Fortaleza",
+        });
 
         document
           .getElementById("tela-perfil-publico")
@@ -3232,7 +3234,10 @@
           ? "Administrador"
           : "Usuário";
         document.getElementById("p-desde-label").textContent =
-          "Desde " + new Date(u.criadoEm).toLocaleDateString("pt-BR");
+          "Desde " +
+          new Date(u.criadoEm).toLocaleDateString("pt-BR", {
+            timeZone: "America/Fortaleza",
+          });
         document.getElementById("p-nome-completo").textContent = u.nomeCompleto;
         document.getElementById("p-cpf").textContent = formatCPF(u.id || u.cpf);
         document.getElementById("p-email").textContent = u.email;
@@ -3556,11 +3561,7 @@
 
       // ── Socket events ──────────────────────────────────────────────────────────────
       socket.on("erro_auth", (msg) => {
-        localStorage.removeItem("isp_token");
-        document.getElementById("app").style.display = "none";
-        document.getElementById("tela-login").classList.remove("oculto");
-        document.getElementById("l-erro").textContent = msg;
-        socket.disconnect();
+        document.getElementById("l-erro").textContent = msg || "";
       });
 
       socket.on("meu_perfil", async ({ admin, cpf, gestor }) => {
