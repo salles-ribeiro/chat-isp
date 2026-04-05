@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat ISP</title>
+    <title>ChatISP</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
@@ -18,21 +18,32 @@
         padding: 0;
       }
       :root {
+        /* Tema claro (PADRÃO) */
+        --bg0: #f5f7fb;
+        --bg1: #ffffff;
+        --bg2: #f0f2f7;
+        --bg3: #e6e9f0;
+        --border: #d6dbe6;
+        --accent: #00b4d8;
+        --danger: #ff4d4d;
+        --warn: #ffaa00;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --white: #111827;
+        --dm: #7c3aed;
+      }
+      body.tema-escuro {
         --bg0: #0d0f12;
         --bg1: #13161b;
         --bg2: #1a1e25;
         --bg3: #222730;
         --border: #2a303c;
-        --accent: #00b4d8;
-        --danger: #ff4d4d;
-        --warn: #ffaa00;
         --text: #c8cdd8;
         --muted: #5a6275;
         --white: #eef0f5;
         --dm: #a78bfa;
-        --mono: "JetBrains Mono", monospace;
-        --sans: "IBM Plex Sans", sans-serif;
       }
+
       html,
       body {
         height: 100%;
@@ -1901,6 +1912,11 @@
             <button class="btn-sb" id="btn-admin-chat" style="display: none">
               admin
             </button>
+
+            <button class="btn-sb" id="btn-tema" title="Alternar tema">
+              ◐
+            </button>
+
             <button class="btn-sb danger" id="btn-sair">sair</button>
           </div>
         </div>
@@ -4204,6 +4220,29 @@
           e.preventDefault();
           enviar();
         }
+      });
+
+      // ── Tema (claro/escuro) ─────────────────────────────
+      function aplicarTema(tema) {
+        if (tema === "escuro") {
+          document.body.classList.add("tema-escuro");
+        } else {
+          document.body.classList.remove("tema-escuro");
+        }
+        localStorage.setItem("isp_tema", tema);
+      }
+
+      // Carregar tema salvo
+      (function () {
+        const temaSalvo = localStorage.getItem("isp_tema") || "claro";
+        aplicarTema(temaSalvo);
+      })();
+
+      // Botão toggle
+      document.getElementById("btn-tema").addEventListener("click", () => {
+        const atual = localStorage.getItem("isp_tema") || "claro";
+        const novo = atual === "claro" ? "escuro" : "claro";
+        aplicarTema(novo);
       });
     </script>
   </body>
