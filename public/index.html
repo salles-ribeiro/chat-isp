@@ -31,6 +31,8 @@
         --muted: #6b7280;
         --white: #111827;
         --dm: #7c3aed;
+        --msg-own-bg: #e8f2ff;
+        --msg-own-text: #1f2937;
       }
       body.tema-escuro {
         --bg0: #0d0f12;
@@ -42,6 +44,8 @@
         --muted: #5a6275;
         --white: #eef0f5;
         --dm: #a78bfa;
+        --msg-own-bg: #2d1a4a;
+        --msg-own-text: #eef0f5;
       }
 
       html,
@@ -839,8 +843,8 @@
         word-break: break-word;
       }
       .msg-wrap.eu .msg-bolha {
-        background: #2d1a4a;
-        color: var(--white);
+        background: var(--msg-own-bg);
+        color: var(--msg-own-text);
         border-bottom-right-radius: 3px;
       }
       .msg-wrap.outro .msg-bolha {
@@ -903,7 +907,7 @@
         outline: none;
         font-family: inherit;
         font-size: 14px;
-        color: var(--white);
+        color: var(--text);
         resize: none;
         height: 22px;
         max-height: 120px;
@@ -1130,7 +1134,7 @@
         border-radius: 6px;
         padding: 7px 12px;
         font-size: 13px;
-        color: var(--white);
+        color: var(--text);
         outline: none;
         font-family: inherit;
       }
@@ -2218,7 +2222,7 @@
                   border-radius: 6px;
                   padding: 6px 10px;
                   font-size: 12px;
-                  color: var(--white);
+                  color: var(--text);
                   outline: none;
                 "
                 oninput="filtrarLista('lista-dms', this.value)"
@@ -2247,7 +2251,7 @@
                   border-radius: 6px;
                   padding: 6px 10px;
                   font-size: 12px;
-                  color: var(--white);
+                  color: var(--text);
                   outline: none;
                 "
                 oninput="filtrarLista('lista-online', this.value)"
@@ -2434,7 +2438,7 @@
                 style="
                   font-family: var(--mono);
                   font-size: 13px;
-                  color: var(--white);
+                  color: var(--text);
                   min-width: 44px;
                 "
                 >0:00</span
