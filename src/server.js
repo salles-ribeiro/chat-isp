@@ -518,7 +518,11 @@ function chavePriv(a, b) {
   return [a, b].sort().join("|");
 }
 function formatHora(d) {
-  return d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  return new Intl.DateTimeFormat("pt-BR", {
+    timeZone: "America/Fortaleza",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(d));
 }
 
 async function nomeAtual(cpf) {
