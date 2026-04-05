@@ -1263,57 +1263,184 @@
       @media (max-width: 768px) {
         html,
         body {
-          overflow: auto;
+          height: 100%;
+          overflow: hidden;
         }
 
-        .app-container,
-        .main,
-        .layout {
+        #app {
           display: flex;
           flex-direction: column;
-          height: auto;
+          height: 100vh;
+          overflow: hidden;
         }
 
-        .sidebar {
-          width: 100% !important;
-          height: auto;
-          position: relative;
-        }
-
-        .content,
-        .chat-container,
-        .workspace {
+        #sidebar,
+        #col-meio {
           width: 100%;
-          height: auto;
+          min-width: 0;
+          border-right: none;
         }
 
-        .chat-messages {
-          height: calc(100vh - 140px);
-          overflow-y: auto;
-          padding: 10px;
+        #sidebar {
+          flex-shrink: 0;
         }
 
-        .chat-input-area {
-          position: sticky;
-          bottom: 0;
-          background: var(--bg0);
-          padding: 10px;
+        #col-meio {
+          display: flex;
+          flex-direction: row;
+          min-height: 180px;
+          max-height: 32vh;
+          border-top: 1px solid var(--border);
+          border-bottom: 1px solid var(--border);
         }
 
-        input,
-        textarea,
-        select {
-          font-size: 16px;
+        #col-dms,
+        #col-online {
+          flex: 1;
+          min-width: 0;
         }
 
-        .btn {
+        #main {
+          flex: 1;
+          min-height: 0;
+          overflow: hidden;
+        }
+
+        #tela-inicial,
+        #conversa {
+          height: 100%;
+          min-height: 0;
+        }
+
+        #conversa {
+          display: flex;
+          flex-direction: column;
+        }
+
+        #canal-header {
           padding: 10px 12px;
+          gap: 8px;
+          flex-wrap: wrap;
         }
 
-        .msg,
-        .message {
-          word-break: break-word;
+        #mensagens {
+          flex: 1;
+          min-height: 0;
+          padding: 12px;
+        }
+
+        #dig-info {
+          padding: 0 12px;
+        }
+
+        #upload-preview {
+          padding: 8px 12px;
+        }
+
+        #input-area {
+          padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+          background: var(--bg1);
+        }
+
+        .input-wrap {
+          display: grid;
+          grid-template-columns: auto auto auto 1fr auto auto;
+          align-items: end;
+          gap: 8px;
+          padding: 8px 10px;
+          border-radius: 18px;
+        }
+
+        #input-msg {
+          min-width: 0;
+          width: 100%;
+          font-size: 16px;
+          line-height: 1.4;
+          max-height: 96px;
+        }
+
+        .btn-attach,
+        .btn-camera,
+        .btn-emoji,
+        .btn-audio {
+          font-size: 17px;
+          padding: 4px;
+        }
+
+        .btn-send {
+          width: 38px;
+          height: 38px;
+          align-self: center;
+        }
+
+        .msg-wrap {
+          max-width: 88%;
+        }
+
+        .msg-img,
+        .msg-video,
+        .msg-doc {
           max-width: 100%;
+        }
+
+        #emoji-picker-wrap {
+          right: 10px;
+          left: 10px;
+          bottom: 68px;
+        }
+
+        emoji-picker {
+          width: 100%;
+          max-width: 100%;
+          height: 300px;
+        }
+
+        .box,
+        .box-wide {
+          width: calc(100vw - 24px);
+          max-width: 100%;
+          padding: 20px;
+          max-height: 92vh;
+        }
+
+        .grid2 {
+          grid-template-columns: 1fr;
+        }
+
+        .perfil-header {
+          align-items: center;
+        }
+      }
+      @media (max-width: 480px) {
+        .input-wrap {
+          grid-template-columns: auto auto auto 1fr auto auto;
+          gap: 6px;
+          padding: 8px;
+        }
+
+        .btn-attach,
+        .btn-camera,
+        .btn-emoji,
+        .btn-audio {
+          font-size: 16px;
+          padding: 3px;
+        }
+
+        .btn-send {
+          width: 36px;
+          height: 36px;
+        }
+
+        #canal-header {
+          padding: 8px 10px;
+        }
+
+        #mensagens {
+          padding: 10px;
+        }
+
+        .msg-wrap {
+          max-width: 92%;
         }
       }
     </style>
