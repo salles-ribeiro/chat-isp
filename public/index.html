@@ -1270,54 +1270,81 @@
         }
 
         #app {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          grid-template-rows: auto auto 1fr;
-          grid-template-areas:
-            "sidebar online"
-            "dms dms"
-            "main main";
+          display: flex;
+          flex-direction: column;
           height: 100vh;
           min-height: 100dvh;
           overflow: hidden;
           background: var(--bg0);
         }
 
-        #sidebar {
-          grid-area: sidebar;
+        /* topo: canais à esquerda e online à direita */
+        #sidebar,
+        #col-meio {
           width: 100%;
           min-width: 0;
-          border-right: 1px solid var(--border);
+        }
+
+        #sidebar {
+          flex: 0 0 auto;
+          border-right: none;
           border-bottom: 1px solid var(--border);
-          overflow: hidden;
         }
 
         #col-meio {
-          display: contents;
-        }
-
-        #col-online {
-          grid-area: online;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-areas: "dms online";
+          align-items: stretch;
           width: 100%;
           min-width: 0;
           border-right: none;
           border-bottom: 1px solid var(--border);
+        }
+
+        #col-online {
+          grid-area: online;
+          min-width: 0;
+          border-right: none;
+          border-bottom: 1px solid var(--border);
+          max-height: 22vh;
           overflow: hidden;
         }
 
         #col-dms {
           grid-area: dms;
-          width: 100%;
           min-width: 0;
           border-right: none;
+          max-height: 22vh;
           border-bottom: 1px solid var(--border);
-          max-height: 28vh;
           overflow: hidden;
         }
 
+        #col-online .sb-header,
+        #col-dms .sb-header,
+        #sidebar .sb-header {
+          padding: 10px 12px;
+        }
+
+        #col-online .sb-scroll,
+        #col-dms .sb-scroll,
+        #sidebar .sb-scroll {
+          overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        .sec-label {
+          padding: 10px 12px 4px;
+        }
+
+        #lista-canais .conv-item,
+        #lista-online .conv-item,
+        #lista-dms .conv-item {
+          padding: 9px 10px;
+        }
+
         #main {
-          grid-area: main;
-          min-width: 0;
+          flex: 1 1 auto;
           min-height: 0;
           display: flex;
           flex-direction: column;
@@ -1335,26 +1362,6 @@
           display: flex;
           flex-direction: column;
           overflow: hidden;
-        }
-
-        .sb-header {
-          padding: 10px 12px;
-        }
-
-        .sec-label {
-          padding: 10px 12px 4px;
-        }
-
-        #lista-canais .conv-item,
-        #lista-online .conv-item,
-        #lista-dms .conv-item {
-          padding: 9px 10px;
-        }
-
-        #col-online .sb-scroll,
-        #sidebar .sb-scroll,
-        #col-dms .sb-scroll {
-          overflow-y: auto;
         }
 
         #canal-header {
@@ -1390,7 +1397,7 @@
           position: sticky;
           bottom: 0;
           z-index: 30;
-          padding: 6px 10px calc(18px + env(safe-area-inset-bottom));
+          padding: 6px 10px calc(24px + env(safe-area-inset-bottom));
           border-top: 1px solid var(--border);
           background: var(--bg1);
           flex-shrink: 0;
@@ -1484,64 +1491,6 @@
 
         .perfil-header {
           align-items: center;
-        }
-      }
-
-      @media (max-width: 480px) {
-        #app {
-          grid-template-columns: 1fr 1fr;
-          grid-template-rows: auto auto 1fr;
-        }
-
-        #sidebar,
-        #col-online {
-          max-height: 34vh;
-        }
-
-        #col-dms {
-          max-height: 24vh;
-        }
-
-        #canal-header {
-          padding: 8px 10px;
-        }
-
-        #mensagens {
-          padding: 8px 10px 4px;
-        }
-
-        #input-area {
-          padding: 6px 8px calc(16px + env(safe-area-inset-bottom));
-        }
-
-        .input-wrap {
-          gap: 4px;
-          padding: 7px 8px;
-          grid-template-columns: auto auto auto 1fr auto auto;
-        }
-
-        .btn-attach,
-        .btn-camera,
-        .btn-emoji,
-        .btn-audio {
-          width: 32px;
-          height: 32px;
-          font-size: 16px;
-        }
-
-        .btn-send {
-          width: 36px;
-          height: 36px;
-        }
-
-        #input-msg {
-          height: 36px;
-          min-height: 36px;
-          font-size: 16px;
-        }
-
-        .msg-wrap {
-          max-width: 92%;
         }
       }
     </style>
