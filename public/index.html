@@ -57,12 +57,10 @@
       button,
       textarea,
       select {
-        font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
         font-weight: 400;
-        letter-spacing: 0.2px;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-rendering: optimizeLegibility;
       }
       .tela {
         position: fixed;
@@ -169,7 +167,7 @@
         border: 1px solid var(--border);
         border-radius: 6px;
         padding: 10px 13px;
-        font-family: var(--sans);
+        font-family: inherit;
         font-size: 14px;
         color: var(--white);
         outline: none;
@@ -196,7 +194,7 @@
       .btn {
         background: var(--accent);
         color: #fff;
-        font-family: var(--sans);
+        font-family: inherit;
         font-weight: 600;
         font-size: 13px;
         padding: 10px 20px;
@@ -902,7 +900,7 @@
         background: none;
         border: none;
         outline: none;
-        font-family: var(--sans);
+        font-family: inherit;
         font-size: 14px;
         color: var(--white);
         resize: none;
@@ -1133,7 +1131,7 @@
         font-size: 13px;
         color: var(--white);
         outline: none;
-        font-family: var(--sans);
+        font-family: inherit;
       }
       #busca-conversa-input:focus {
         border-color: var(--accent);
