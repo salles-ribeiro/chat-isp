@@ -13,16 +13,26 @@
       --border:#2a303c;--accent:#00b4d8;--danger:#ff4d4d;--warn:#ffaa00;
       --text:#c8cdd8;--muted:#5a6275;--white:#eef0f5;--dm:#a78bfa;
       --mono:'JetBrains Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
+      --msg-eu:#2d1a4a;
     }
+    /* ── Tema claro ─────────────────────────────────── */
     [data-tema="claro"]{
       --bg0:#f0f2f5;--bg1:#ffffff;--bg2:#f5f7fa;--bg3:#e8ecf1;
       --border:#d1d9e3;--accent:#0090b3;--danger:#e03030;--warn:#e08800;
       --text:#2c3545;--muted:#8896aa;--white:#1a2233;--dm:#7c5fd4;
+      --msg-eu:#e8e0f8;
     }
+    [data-tema="claro"] html,[data-tema="claro"] body{color:#2c3545;}
     [data-tema="claro"] .msg-wrap.eu .msg-bolha{background:#ddd3f5;color:#1a1030;}
     [data-tema="claro"] .msg-wrap.outro .msg-bolha{background:#e8ecf1;color:#2c3545;}
-    #btn-tema .tema-icon{font-size:13px;line-height:1;}
+    [data-tema="claro"] .msg-nome-topo{color:#0090b3;}
+    [data-tema="claro"] .sb-av{background:#e0e5ed;}
+    [data-tema="claro"] .conv-av{background:#e0e5ed;}
+    [data-tema="claro"] .u-av{background:#e0e5ed;}
+    [data-tema="claro"] #lightbox{background:rgba(0,0,0,.82);}
     html,body{height:100%;overflow:hidden;background:var(--bg0);color:var(--text);font-family:var(--sans);}
+    /* ── Botão tema ─────────────────────────────────── */
+    #btn-tema .tema-icon{font-size:13px;line-height:1;}
     .tela{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:var(--bg0);z-index:100;transition:opacity .3s,transform .3s;}
     .tela.oculto{opacity:0;transform:translateY(-12px);pointer-events:none;}
     .box{width:420px;background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:36px;max-height:90vh;overflow-y:auto;}
@@ -163,131 +173,6 @@
     .btn-send.dm{background:var(--dm);}
     .btn-send:hover{opacity:.8;}
     .btn-send svg{width:15px;height:15px;fill:#fff;}
-
-    /* ══════════════════════════════════════════════════
-       MOBILE RESPONSIVO — layout estilo WhatsApp
-       ══════════════════════════════════════════════════ */
-    @media (max-width: 768px) {
-
-      /* ── Reset layout principal ── */
-      #app { flex-direction: column; height: 100dvh; position: relative; overflow: hidden; }
-
-      /* ── Sidebar vira painel deslizante ── */
-      #sidebar {
-        position: fixed; top: 0; left: -100%; width: 80%; max-width: 300px;
-        height: 100dvh; z-index: 400; transition: left .25s ease;
-        box-shadow: 4px 0 20px rgba(0,0,0,.3);
-      }
-      #sidebar.mob-aberto { left: 0; }
-
-      /* ── Overlay escuro ao abrir sidebar ── */
-      #mob-overlay {
-        display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5);
-        z-index: 399;
-      }
-      #mob-overlay.ativo { display: block; }
-
-      /* ── Área central vira tela única com abas ── */
-      #col-meio {
-        width: 100%; min-width: 0; flex: 1;
-        flex-direction: column; overflow: hidden;
-        border-right: none;
-      }
-
-      /* ── Abas superiores: Conversas | Online ── */
-      #mob-abas {
-        display: flex; background: var(--bg1);
-        border-bottom: 1px solid var(--border); flex-shrink: 0;
-      }
-      .mob-aba {
-        flex: 1; padding: 12px 8px; text-align: center;
-        font-size: 11px; font-family: var(--mono); color: var(--muted);
-        letter-spacing: .06em; cursor: pointer;
-        border-bottom: 2px solid transparent; transition: all .15s;
-      }
-      .mob-aba.ativa { color: var(--accent); border-bottom-color: var(--accent); }
-
-      /* ── Painéis de aba ── */
-      #col-dms, #col-online {
-        position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-        transition: opacity .15s, transform .15s;
-      }
-      #col-dms { border-right: none; }
-      #col-online.mob-oculto { opacity: 0; pointer-events: none; transform: translateX(20px); }
-      #col-dms.mob-oculto   { opacity: 0; pointer-events: none; transform: translateX(-20px); }
-
-      /* Wrapper relativo para os painéis */
-      #mob-painel-wrap {
-        flex: 1; position: relative; overflow: hidden;
-      }
-
-      /* ── Main (conversa) ── */
-      #main {
-        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-        z-index: 200; transform: translateX(100%);
-        transition: transform .25s ease; background: var(--bg0);
-      }
-      #main.mob-aberto { transform: translateX(0); }
-
-      /* ── Header da conversa com botão voltar ── */
-      #canal-header { padding: 10px 14px; }
-      #btn-mob-voltar {
-        display: flex; align-items: center; justify-content: center;
-        background: none; border: none; color: var(--accent);
-        font-size: 22px; cursor: pointer; padding: 0 8px 0 0;
-        flex-shrink: 0; line-height: 1;
-      }
-
-      /* ── Barra inferior de navegação ── */
-      #mob-nav {
-        display: flex; background: var(--bg1);
-        border-top: 1px solid var(--border);
-        padding: 6px 0 max(6px, env(safe-area-inset-bottom));
-        flex-shrink: 0; position: relative; z-index: 10;
-      }
-      .mob-nav-btn {
-        flex: 1; display: flex; flex-direction: column;
-        align-items: center; gap: 3px; cursor: pointer;
-        background: none; border: none; color: var(--muted);
-        font-size: 10px; font-family: var(--mono); padding: 4px 0;
-        transition: color .15s; position: relative;
-      }
-      .mob-nav-btn .nav-icon { font-size: 20px; line-height: 1; }
-      .mob-nav-btn.ativo { color: var(--accent); }
-      .mob-nav-badge {
-        position: absolute; top: 2px; right: calc(50% - 18px);
-        background: var(--danger); color: #fff; border-radius: 10px;
-        font-size: 9px; min-width: 16px; height: 16px;
-        display: flex; align-items: center; justify-content: center;
-        padding: 0 3px; font-family: var(--mono);
-      }
-      .mob-nav-badge:empty, .mob-nav-badge[data-count="0"] { display: none; }
-
-      /* ── Mensagens: max-width maior no mobile ── */
-      .msg-wrap { max-width: 82%; }
-
-      /* ── Input area: padding para teclado virtual ── */
-      #input-area { padding: 8px 10px max(10px, env(safe-area-inset-bottom)); }
-
-      /* ── Telas modais ocupam tela toda no mobile ── */
-      .tela { align-items: flex-start; }
-      .box { width: 100%; max-width: 100%; border-radius: 0; min-height: 100dvh; padding: 24px 20px; }
-      .box-wide { width: 100%; max-width: 100%; border-radius: 0; }
-
-      /* ── Ocultar col-online na barra lateral (já fica na aba) ── */
-      #sidebar #col-online { display: none; }
-
-      /* ── Tela inicial mobile: mais compacta ── */
-      #tela-inicial .logo-grande { font-size: 22px; }
-    }
-
-    /* Safe area para iPhone com notch */
-    @supports (padding: max(0px)) {
-      @media (max-width: 768px) {
-        #mob-nav { padding-bottom: max(6px, env(safe-area-inset-bottom)); }
-        #input-area { padding-bottom: max(10px, env(safe-area-inset-bottom)); }
-      }
-    }
   </style>
 </head>
 <body>
@@ -508,16 +393,10 @@
 
 <!-- App -->
 <div id="app" style="display:none">
-<!-- Overlay mobile (fecha sidebar) -->
-<div id="mob-overlay" onclick="fecharSidebarMob()"></div>
-
   <!-- Coluna 1: Canais + perfil -->
   <div id="sidebar">
     <div class="sb-header">
-      <div style="display:flex;align-items:center;justify-content:space-between;">
-        <div class="workspace-name" style="margin-bottom:0">PROVEDOR INTERNO</div>
-        <button id="btn-fechar-sidebar-mob" onclick="fecharSidebarMob()" style="display:none;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;padding:0;">✕</button>
-      </div>
+      <div class="workspace-name">PROVEDOR INTERNO</div>
       <div style="display:flex;align-items:center;gap:8px;padding:4px 2px;">
         <div style="position:relative;flex-shrink:0;">
           <div class="sb-av" id="sb-av" style="cursor:pointer;" onclick="abrirPerfilProprio()"></div>
@@ -534,6 +413,7 @@
       </div>
       <div class="sb-actions">
         <button class="btn-sb" id="btn-admin-chat" style="display:none">admin</button>
+        <button class="btn-sb" id="btn-tema" title="Alternar tema" onclick="alternarTema()"><span class="tema-icon">🌙</span></button>
         <button class="btn-sb danger" id="btn-sair">sair</button>
       </div>
     </div>
@@ -548,25 +428,16 @@
 
   <!-- Coluna 2: DMs + Online lado a lado -->
   <div id="col-meio">
-    <!-- Abas mobile (só visíveis em mobile) -->
-    <div id="mob-abas" style="display:none;">
-      <div class="mob-aba ativa" id="mob-aba-dms" onclick="mobMostrarAba('dms')">💬 Conversas</div>
-      <div class="mob-aba" id="mob-aba-online" onclick="mobMostrarAba('online')">🟢 Online</div>
-    </div>
-    <div id="mob-painel-wrap" style="flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column;">
     <div id="col-dms">
       <div class="sb-header" style="border-bottom:1px solid var(--border);padding:12px 14px;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <button id="btn-mob-menu" onclick="abrirSidebarMob()" style="display:none;background:none;border:none;color:var(--accent);font-size:22px;cursor:pointer;padding:0;line-height:1;flex-shrink:0;">☰</button>
-          <div class="workspace-name" style="margin-bottom:0">MENSAGENS DIRETAS</div>
-        </div>
+        <div class="workspace-name">MENSAGENS DIRETAS</div>
       </div>
       <div class="sb-scroll">
         <div style="padding:6px 8px;"><input type="text" id="busca-dms" placeholder="Buscar..." style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px;color:var(--white);outline:none;" oninput="filtrarLista('lista-dms',this.value)"></div>
         <div id="lista-dms"></div>
       </div>
     </div>
-    <div id="col-online" class="mob-oculto">
+    <div id="col-online">
       <div class="sb-header" style="border-bottom:1px solid var(--border);padding:12px 14px;">
         <div class="workspace-name">ONLINE</div>
       </div>
@@ -574,28 +445,6 @@
         <div style="padding:6px 8px;"><input type="text" id="busca-online" placeholder="Buscar..." style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:12px;color:var(--white);outline:none;" oninput="filtrarLista('lista-online',this.value)"></div>
         <div id="lista-online"></div>
       </div>
-    </div>
-    </div><!-- mob-painel-wrap -->
-    <!-- Barra de navegação inferior mobile -->
-    <div id="mob-nav" style="display:none;">
-      <button class="mob-nav-btn ativo" id="mob-nav-dms" onclick="mobNavegar('dms')">
-        <span class="nav-icon">💬</span>
-        <span>Mensagens</span>
-        <span class="mob-nav-badge" id="mob-badge-dms"></span>
-      </button>
-      <button class="mob-nav-btn" id="mob-nav-canais" onclick="mobNavegar('canais')">
-        <span class="nav-icon">#</span>
-        <span>Canais</span>
-        <span class="mob-nav-badge" id="mob-badge-canais"></span>
-      </button>
-      <button class="mob-nav-btn" id="mob-nav-online" onclick="mobNavegar('online')">
-        <span class="nav-icon">🟢</span>
-        <span>Online</span>
-      </button>
-      <button class="mob-nav-btn" id="mob-nav-perfil" onclick="abrirPerfilProprio()">
-        <span class="nav-icon">👤</span>
-        <span>Perfil</span>
-      </button>
     </div>
   </div>
 
@@ -606,7 +455,6 @@
     </div>
     <div id="conversa" style="display:none;flex:1;flex-direction:column;overflow:hidden;">
       <div id="canal-header">
-        <button id="btn-mob-voltar" onclick="mobVoltarLista()" style="display:none;">‹</button>
         <div class="h-av" id="h-av"></div>
         <div class="h-info">
           <div class="h-nome" id="h-nome"></div>
@@ -1575,143 +1423,30 @@ function enviar(){
 document.getElementById('btn-send').addEventListener('click',enviar);
 inputMsg.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviar();}});
 
-// ── Mobile responsivo ──────────────────────────────────────────────────────────
-const ehMobile = () => window.innerWidth <= 768;
-
-function mobInit() {
-  if (!ehMobile()) return;
-  // Mostrar elementos mobile
-  document.getElementById('mob-abas').style.display = 'flex';
-  document.getElementById('mob-nav').style.display = 'flex';
-  document.getElementById('btn-mob-menu').style.display = 'flex';
-  document.getElementById('btn-fechar-sidebar-mob').style.display = 'block';
-  // Ocultar col-online por padrão (fica na aba)
-  document.getElementById('col-online').classList.add('mob-oculto');
-  document.getElementById('col-dms').classList.remove('mob-oculto');
-}
-
-function abrirSidebarMob() {
-  document.getElementById('sidebar').classList.add('mob-aberto');
-  document.getElementById('mob-overlay').classList.add('ativo');
-}
-function fecharSidebarMob() {
-  document.getElementById('sidebar').classList.remove('mob-aberto');
-  document.getElementById('mob-overlay').classList.remove('ativo');
-}
-
-function mobMostrarAba(aba) {
-  const dms = document.getElementById('col-dms');
-  const online = document.getElementById('col-online');
-  const abaDms = document.getElementById('mob-aba-dms');
-  const abaOnline = document.getElementById('mob-aba-online');
-  if (aba === 'dms') {
-    dms.classList.remove('mob-oculto');
-    online.classList.add('mob-oculto');
-    abaDms.classList.add('ativa');
-    abaOnline.classList.remove('ativa');
-  } else {
-    online.classList.remove('mob-oculto');
-    dms.classList.add('mob-oculto');
-    abaOnline.classList.add('ativa');
-    abaDms.classList.remove('ativa');
-  }
-}
-
-// Navegação barra inferior
-let mobAbaAtiva = 'dms';
-function mobNavegar(aba) {
-  mobAbaAtiva = aba;
-  // Atualizar botões ativos
-  ['dms','canais','online','perfil'].forEach(a => {
-    const btn = document.getElementById('mob-nav-' + a);
-    if (btn) btn.classList.toggle('ativo', a === aba);
-  });
-  if (aba === 'dms') {
-    mobMostrarAba('dms');
-  } else if (aba === 'online') {
-    mobMostrarAba('online');
-  } else if (aba === 'canais') {
-    // Abre sidebar com canais
-    abrirSidebarMob();
-  }
-}
-
-function mobAbrirConversa() {
-  if (!ehMobile()) return;
-  document.getElementById('main').classList.add('mob-aberto');
-  document.getElementById('btn-mob-voltar').style.display = 'flex';
-}
-
-function mobVoltarLista() {
-  document.getElementById('main').classList.remove('mob-aberto');
-  document.getElementById('btn-mob-voltar').style.display = 'none';
-}
-
-// Interceptar abrirCanal e abrirDM para mobile
-const _abrirCanalOrig = abrirCanal;
-abrirCanal = function(slug) {
-  _abrirCanalOrig(slug);
-  fecharSidebarMob();
-  mobAbrirConversa();
-};
-const _abrirDMOrig = abrirDM;
-abrirDM = function(nome) {
-  _abrirDMOrig(nome);
-  mobAbrirConversa();
-};
-
-// Atualizar badges na barra de navegação mobile
-function mobAtualizarBadges() {
-  if (!ehMobile()) return;
-  const totalCanais = Object.values(naoLidasCanais).reduce((a,b)=>a+b,0);
-  const totalDMs = Object.values(naoLidasDMs).reduce((a,b)=>a+b,0);
-  const bc = document.getElementById('mob-badge-canais');
-  const bd = document.getElementById('mob-badge-dms');
-  if (bc) bc.textContent = totalCanais > 0 ? totalCanais : '';
-  if (bd) bd.textContent = totalDMs > 0 ? totalDMs : '';
-}
-
-// Hook no renderSidebar para atualizar badges mobile
-const _renderSidebarOrig = renderSidebar;
-renderSidebar = function() {
-  _renderSidebarOrig();
-  mobAtualizarBadges();
-};
-
-// Inicializar ao carregar e ao redimensionar
-window.addEventListener('resize', () => {
-  mobInit();
-  if (!ehMobile()) {
-    // Restaurar desktop
-    document.getElementById('mob-abas').style.display = 'none';
-    document.getElementById('mob-nav').style.display = 'none';
-    document.getElementById('btn-mob-menu').style.display = 'none';
-    document.getElementById('col-online').classList.remove('mob-oculto');
-    document.getElementById('col-dms').classList.remove('mob-oculto');
-    document.getElementById('main').classList.remove('mob-aberto');
-    document.getElementById('btn-mob-voltar').style.display = 'none';
-  }
-});
-// Iniciar após DOM pronto
-setTimeout(mobInit, 50);
-
 // ── Tema claro / escuro ────────────────────────────────────────────────────────
 function alternarTema(){
-  const atual=document.documentElement.getAttribute('data-tema');
-  aplicarTema(atual==='claro'?'escuro':'claro');
-  localStorage.setItem('isp_tema',document.documentElement.getAttribute('data-tema')||'escuro');
+  const atual = document.documentElement.getAttribute('data-tema');
+  const novoTema = atual === 'claro' ? 'escuro' : 'claro';
+  aplicarTema(novoTema);
+  localStorage.setItem('isp_tema', novoTema);
 }
 function aplicarTema(tema){
-  const btn=document.getElementById('btn-tema');
-  if(tema==='claro'){
+  const btn = document.getElementById('btn-tema');
+  if(tema === 'claro'){
     document.documentElement.setAttribute('data-tema','claro');
-    if(btn){btn.querySelector('.tema-icon').textContent='☀️';}
+    btn.querySelector('.tema-icon').textContent = '☀️';
+    btn.querySelector('.tema-label').textContent = 'claro';
   } else {
     document.documentElement.removeAttribute('data-tema');
-    if(btn){btn.querySelector('.tema-icon').textContent='🌙';}
+    btn.querySelector('.tema-icon').textContent = '🌙';
+    btn.querySelector('.tema-label').textContent = 'escuro';
   }
 }
-(function(){aplicarTema(localStorage.getItem('isp_tema')||'claro');})();
+// Restaurar tema salvo ao carregar — padrão: claro
+(function(){
+  const temaSalvo = localStorage.getItem('isp_tema') || 'claro';
+  aplicarTema(temaSalvo);
+})();
 </script>
 </body>
 </html>
