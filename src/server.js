@@ -33,7 +33,6 @@ if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, UPLOAD_DIR),
-  destination: (req, file, cb) => cb(null, UPLOAD_DIR),
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase();
     const nome =
@@ -103,14 +102,24 @@ app.post("/auth/login", async (req, res) => {
   res.json(r);
 });
 
+// DEPOIS — adicionar import no topo do arquivo junto dos outros requires,
+// e simplificar a rota:
+
+// No topo (junto dos outros requires já existentes):
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+  console.error("FATAL: JWT_SECRET não definido no .env");
+  process.exit(1);
+}
+
+// A rota fica assim:
 app.post("/auth/renovar-token", autenticar, async (req, res) => {
   const u = await buscarPerfil(req.usuario.cpf);
   if (!u) return res.status(404).json({ erro: "Não encontrado." });
-  const jwt = require("jsonwebtoken");
-  const SECRET = process.env.JWT_SECRET || "troque-isso-em-producao";
   const token = jwt.sign(
     { cpf: u.id, nome: u.nomeExibicao, admin: u.admin, gestor: u.gestor },
-    SECRET,
+    JWT_SECRET,
     { expiresIn: "7d" },
   );
   res.json({ token, nome: u.nomeExibicao, admin: u.admin, gestor: u.gestor });
@@ -385,11 +394,17 @@ app.get("/nao-lidas", autenticar, async (req, res) => {
   const cpf = req.usuario.cpf;
   const canaisDoUsuario = await canaisPermitidos(cpf);
   const naoLidasCanais = {};
+
+  // DEPOIS:
+  const slugsDoUsuario = canaisDoUsuario.map((c) => c.slug);
+  const visitas = await prisma.ultimaVisita.findMany({
+    where: { cpf, canalSlug: { in: slugsDoUsuario } },
+  });
+  const visitaMap = Object.fromEntries(
+    visitas.map((v) => [v.canalSlug, v.visitadoEm]),
+  );
   for (const canal of canaisDoUsuario) {
-    const uv = await prisma.ultimaVisita
-      .findUnique({ where: { cpf_canalSlug: { cpf, canalSlug: canal.slug } } })
-      .catch(() => null);
-    const desde = uv?.visitadoEm || new Date(0);
+    const desde = visitaMap[canal.slug] || new Date(0);
     const count = await prisma.mensagem.count({
       where: {
         canalId: canal.id,
@@ -601,23 +616,29 @@ async function buscarHistoricoPrivado(conversaId, limite = 50) {
   }));
 }
 
+// DEPOIS:
 async function contarNaoLidasDM(cpf) {
   const convs = await prisma.conversaPrivada.findMany({
     where: { OR: [{ participante1: cpf }, { participante2: cpf }] },
     include: { mensagens: { where: { lida: false, NOT: { autorCpf: cpf } } } },
   });
+  const outroCpfs = convs
+    .filter((c) => !c.id.startsWith("self|") && c.mensagens.length > 0)
+    .map((c) => (c.participante1 === cpf ? c.participante2 : c.participante1));
+  if (outroCpfs.length === 0) return {};
+  const usuarios = await prisma.usuario.findMany({
+    where: { id: { in: outroCpfs } },
+    select: { id: true, nomeExibicao: true },
+  });
+  const nomeMap = Object.fromEntries(
+    usuarios.map((u) => [u.id, u.nomeExibicao]),
+  );
   const r = {};
   for (const conv of convs) {
-    if (conv.id.startsWith("self|")) continue;
-    if (conv.mensagens.length > 0) {
-      const outroCpf =
-        conv.participante1 === cpf ? conv.participante2 : conv.participante1;
-      const outro = await prisma.usuario.findUnique({
-        where: { id: outroCpf },
-        select: { nomeExibicao: true },
-      });
-      if (outro) r[outro.nomeExibicao] = conv.mensagens.length;
-    }
+    if (conv.id.startsWith("self|") || conv.mensagens.length === 0) continue;
+    const outroCpf =
+      conv.participante1 === cpf ? conv.participante2 : conv.participante1;
+    if (nomeMap[outroCpf]) r[nomeMap[outroCpf]] = conv.mensagens.length;
   }
   return r;
 }
@@ -902,11 +923,12 @@ io.on("connection", (socket) => {
     if (sala) socket.to(sala).emit("digitando", { nome: u.nome, digitando: d });
   });
 
+  // DEPOIS — valida que o socket ainda é o dono antes de deletar (evita apagar reconexão):
   socket.on("disconnect", () => {
     const u = sockets.get(socket.id);
     if (u) {
-      cpfOnline.delete(u.cpf);
-      nomeOnline.delete(u.nome);
+      if (cpfOnline.get(u.cpf) === socket.id) cpfOnline.delete(u.cpf);
+      if (nomeOnline.get(u.nome) === socket.id) nomeOnline.delete(u.nome);
       statusMap.delete(u.cpf);
       sockets.delete(socket.id);
       emitirOnline();
